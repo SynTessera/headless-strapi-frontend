@@ -18,32 +18,33 @@ export async function generateMetadata({
   const { locale } = await params;
   const { data: posts } = await getBlogPosts({ locale });
 
-  const enMetadata = {
-    title:
-      "Blog | Moritz Roessler | Senior Frontend Developer in Freiburg im Breisgau",
-    description: posts.length
-      ? "Explore the latest blog posts by Moritz Roessler on JavaScript, React, and more."
-      : "No blog posts available.",
+  const descriptionBase =
+    posts.length > 0
+      ? "Explore the latest blog posts on modern development, frameworks, and more."
+      : "No blog posts available.";
+
+  const siteTitle = "Blog | Your Blog Name";
+  const siteDescription = descriptionBase;
+  const siteUrl = "https://yourdomain.com/blog";
+  const previewImage = "https://yourdomain.com/images/blog-preview.png";
+
+  return {
+    title: siteTitle,
+    description: siteDescription,
     openGraph: {
       type: "website",
-      title:
-        "Blog | Moritz Roessler | Senior Frontend Developer in Freiburg im Breisgau",
-      siteName: "Moe's Website",
-      description: posts.length
-        ? "Explore the latest blog posts by Moritz Roessler on JavaScript, React, and more."
-        : "No blog posts available.",
-      images: ["https://javascript.moe/images/blog-preview.png"],
-      url: "https://javascript.moe/blog",
+      title: siteTitle,
+      siteName: "Your Blog Name",
+      description: siteDescription,
+      images: [previewImage],
+      url: siteUrl,
     },
     twitter: {
       card: "summary_large_image",
-      title:
-        "Blog | Moritz Roessler | Senior Frontend Developer in Freiburg im Breisgau",
-      description: posts.length
-        ? "Explore the latest blog posts by Moritz Roessler on JavaScript, React, and more."
-        : "No blog posts available.",
-      images: ["https://javascript.moe/images/blog-preview.png"],
-      site: "@your_twitter_handle", // Replace with your Twitter handle
+      title: siteTitle,
+      description: siteDescription,
+      images: [previewImage],
+      site: "@your_twitter_handle", // Replace or keep as placeholder
     },
     icons: {
       icon: [
@@ -56,55 +57,10 @@ export async function generateMetadata({
     manifest: "/site.webmanifest",
     other: {
       "msapplication-TileColor": "#da532c",
-      "content-language": "en",
-      canonical: "https://javascript.moe/blog",
+      "content-language": locale,
+      canonical: siteUrl,
     },
   };
-
-  const deMetadata = {
-    title:
-      "Blog | Moritz Roessler | Senior Frontend Entwickler in Freiburg im Breisgau",
-    description: posts.length
-      ? "Entdecke die neuesten Blogbeiträge von Moritz Roessler zu JavaScript, React und mehr."
-      : "Keine Blogbeiträge verfügbar.",
-    openGraph: {
-      type: "website",
-      title:
-        "Blog | Moritz Roessler | Senior Frontend Entwickler in Freiburg im Breisgau",
-      siteName: "Moe's Website",
-      description: posts.length
-        ? "Entdecke die neuesten Blogbeiträge von Moritz Roessler zu JavaScript, React und mehr."
-        : "Keine Blogbeiträge verfügbar.",
-      images: ["https://javascript.moe/images/blog-preview.png"],
-      url: "https://javascript.moe/blog",
-    },
-    twitter: {
-      card: "summary_large_image",
-      title:
-        "Blog | Moritz Roessler | Senior Frontend Entwickler in Freiburg im Breisgau",
-      description: posts.length
-        ? "Entdecke die neuesten Blogbeiträge von Moritz Roessler zu JavaScript, React und mehr."
-        : "Keine Blogbeiträge verfügbar.",
-      images: ["https://javascript.moe/images/blog-preview.png"],
-      site: "@your_twitter_handle", // Replace with your Twitter handle
-    },
-    icons: {
-      icon: [
-        { url: "/favicon-32x32.png", sizes: "32x32", type: "image/png" },
-        { url: "/favicon-16x16.png", sizes: "16x16", type: "image/png" },
-        { url: "/apple-touch-icon.png", sizes: "180x180", type: "image/png" },
-      ],
-      apple: "/apple-touch-icon.png",
-    },
-    manifest: "/site.webmanifest",
-    other: {
-      "msapplication-TileColor": "#da532c",
-      "content-language": "de",
-      canonical: "https://javascript.moe/blog",
-    },
-  };
-
-  return locale === "de" ? deMetadata : enMetadata;
 }
 
 // Blog Page Component
@@ -131,23 +87,20 @@ export default async function BlogPage({ params }: any) {
     <>
       <BlogOverviewStructuredData posts={posts} />
       <div className="max-h-screen relative">
-        {/* Language Flags */}
-
         <Image
           src="/images/wallpaper/19.webp"
           className="w-screen h-screen absolute"
           width={1024}
           height={768}
-          alt="Depiction of a forest fragrance"
+          alt="Blog background image"
         />
         <div className="block w-full justify-center h-screen overflow-y-auto p-1 md:p-4">
           <main className="bg-black/40 w-full mx-auto p-2 md:p-4 drop-shadow-2xl flex flex-col gap-4">
             <div className="flex justify-between">
-              <h1 className="mb-4 text-3xl font-bold">Mo's Blog</h1>
+              <h1 className="mb-4 text-3xl font-bold">Blog</h1>
               <LanguageSwitcher availableLocales={supportedLocales} />
             </div>
 
-            {/* Labels */}
             <Labels
               labels={labels}
               labelNames={labelNames}
@@ -155,7 +108,6 @@ export default async function BlogPage({ params }: any) {
             />
 
             <div className="flex justify-between h-fit">
-              {/* Categories */}
               <div className="flex border-b-2 border-gray-500 overflow-x-auto">
                 {categories.map((cat: any) => {
                   const active = categoryName === cat.slug;
@@ -186,7 +138,6 @@ export default async function BlogPage({ params }: any) {
               />
             </div>
 
-            {/* Posts */}
             {posts.length === 0 ? (
               <p className="text-center text-gray-400">No posts found.</p>
             ) : (
@@ -199,7 +150,11 @@ export default async function BlogPage({ params }: any) {
                     const htmlExcerpt = marked(post.excerpt);
                     const availableLocales = post.localizations?.map(
                       (p: any) => p.locale
-                    );
+                    ) || [];
+
+                    if (!availableLocales.includes(locale))
+                      availableLocales.unshift(locale);
+
                     return (
                       <article
                         key={post.id}
@@ -243,6 +198,7 @@ export default async function BlogPage({ params }: any) {
                             ))}
                             <div className="ml-auto">
                               <LanguageSwitcher
+                                key={post.id}
                                 showCurrent
                                 availableLocales={availableLocales}
                                 href={`/${locale}/blog/${post.slug}-${post.documentId}`}

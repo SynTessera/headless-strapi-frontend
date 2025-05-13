@@ -23,111 +23,17 @@ async function fetchBlogPosts() {
 }
 
 export async function GET(): Promise<Response> {
-  const staticUrls = [
-    {
-      loc: "https://javascript.moe/en",
-      lastmod: "2025-04-27",
-      alternates: [
-        { hreflang: "en", href: "https://javascript.moe/en" },
-        { hreflang: "de", href: "https://javascript.moe/de" },
-      ],
-    },
-    {
-      loc: "https://javascript.moe/de",
-      lastmod: "2025-04-27",
-      alternates: [
-        { hreflang: "en", href: "https://javascript.moe/en" },
-        { hreflang: "de", href: "https://javascript.moe/de" },
-      ],
-    },
-    {
-      loc: "https://javascript.moe/en/about",
-      lastmod: "2025-04-27",
-      alternates: [
-        { hreflang: "en", href: "https://javascript.moe/en/about" },
-        { hreflang: "de", href: "https://javascript.moe/de/about" },
-      ],
-    },
-    {
-      loc: "https://javascript.moe/de/about",
-      lastmod: "2025-04-27",
-      alternates: [
-        { hreflang: "en", href: "https://javascript.moe/en/about" },
-        { hreflang: "de", href: "https://javascript.moe/de/about" },
-      ],
-    },
-    {
-      loc: "https://javascript.moe/en/blog",
-      lastmod: "2025-04-27",
-      alternates: [
-        { hreflang: "en", href: "https://javascript.moe/en/blog" },
-        { hreflang: "de", href: "https://javascript.moe/de/blog" },
-      ],
-    },
-    {
-      loc: "https://javascript.moe/de/blog",
-      lastmod: "2025-04-27",
-      alternates: [
-        { hreflang: "en", href: "https://javascript.moe/en/blog" },
-        { hreflang: "de", href: "https://javascript.moe/de/blog" },
-      ],
-    },
-    {
-      loc: "https://javascript.moe/en/inventory",
-      lastmod: "2025-04-27",
-      alternates: [
-        {
-          hreflang: "en",
-          href: "https://perfumery.javascript.moe/en/inventory",
-        },
-        {
-          hreflang: "de",
-          href: "https://perfumery.javascript.moe/de/inventory",
-        },
-      ],
-    },
-    {
-      loc: "https://javascript.moe/de/inventory",
-      lastmod: "2025-04-27",
-      alternates: [
-        {
-          hreflang: "en",
-          href: "https://perfumery.javascript.moe/en/inventory",
-        },
-        {
-          hreflang: "de",
-          href: "https://perfumery.javascript.moe/de/inventory",
-        },
-      ],
-    },
-    {
-      loc: "https://javascript.moe/en/formulas",
-      lastmod: "2025-04-27",
-      alternates: [
-        {
-          hreflang: "en",
-          href: "https://perfumery.javascript.moe/en/formulas",
-        },
-        {
-          hreflang: "de",
-          href: "https://perfumery.javascript.moe/de/formulas",
-        },
-      ],
-    },
-    {
-      loc: "https://javascript.moe/de/formulas",
-      lastmod: "2025-04-27",
-      alternates: [
-        {
-          hreflang: "en",
-          href: "https://perfumery.javascript.moe/en/formulas",
-        },
-        {
-          hreflang: "de",
-          href: "https://perfumery.javascript.moe/de/formulas",
-        },
-      ],
-    },
+  const staticUrls: any = [
+    /* Enter your static urls here */
+
+    // {
+    //   loc: "https://javascript.moe/en",
+    //   lastmod: "2025-04-27",
+    //   alternates: [
+    //     { hreflang: "en", href: "https://javascript.moe/en" },
+    //     { hreflang: "de", href: "https://javascript.moe/de" },
+    //   ],
+    // },
   ];
 
   const posts = await fetchBlogPosts();

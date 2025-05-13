@@ -16,15 +16,6 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
-        {/* Preload LCP Images */}
-        <link rel="preload" as="image" href="/images/profile.webp" />
-        <link
-          rel="preload"
-          as="image"
-          href="/images/wallpaper/20.webp"
-          fetchPriority="high"
-        />
-        {/* Structured Data */}
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{

@@ -1,5 +1,5 @@
 // STRAPI API URL and Token
-const STRAPI_URL = "https://strapi.javascript.moe/api";
+const STRAPI_URL = process.env.STRAPI_URL;
 const STRAPI_TOKEN = process.env.STRAPI_TOKEN;
 
 // Function to fetch blog posts from Strapi
@@ -13,7 +13,7 @@ export async function getLabels({ locale }: any) {
     });
 
     if (!res.ok) {
-      throw new Error(`Failed to fetch: ${res.status}`);
+      throw new Error(`Failed to fetch: ${res.status} ${STRAPI_TOKEN}`);
     }
 
     return res.json();
@@ -87,5 +87,33 @@ export async function getBlogPosts({
   } catch (e) {
     console.error("Fetch error:", e);
     return { data: [] }; // fallback to empty array
+  }
+}
+
+export async function getBlogPost(
+  id: string,
+  { locale = "en" }: { locale?: string }
+) {
+  try {
+    const res = await fetch(
+      `${STRAPI_URL}/blog-posts/${id}?populate=*&locale=${locale}`,
+      {
+        headers: {
+          Authorization: `Bearer ${STRAPI_TOKEN}`,
+          "Cache-Control": "max-age=600, stale-while-revalidate=0", // Cache for 10 minutes and revalidate immediately after
+        },
+        cache: "force-cache",
+        next: { revalidate: 120 }, // Revalidate every 2 minutes
+      }
+    );
+
+    if (!res.ok) {
+      throw new Error(`Failed to fetch blog post: ${res.status}`);
+    }
+
+    return res.json();
+  } catch (error) {
+    console.error("Fetch error:", error);
+    return { data: [] }; // Fallback to empty array if fetching fails
   }
 }

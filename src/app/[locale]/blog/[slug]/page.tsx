@@ -7,6 +7,7 @@ import { img } from "@/lib/path";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
 import { IconButton } from "@/components/Button";
 import Link from "next/link";
+import { getBlogPost } from "@/lib/api";
 
 // Define the type for the blog post data
 interface BlogPost {
@@ -18,65 +19,41 @@ interface BlogPost {
   coverImage: { url: string };
 }
 
-const STRAPI_URL = "https://strapi.javascript.moe/api/blog-posts";
-const STRAPI_TOKEN = process.env.STRAPI_TOKEN;
-
-async function getBlogPost(id: string, { locale = "en" }: { locale?: string }) {
-  try {
-    const res = await fetch(`${STRAPI_URL}/${id}?populate=*&locale=${locale}`, {
-      headers: {
-        Authorization: `Bearer ${STRAPI_TOKEN}`,
-        "Cache-Control": "max-age=600, stale-while-revalidate=0", // Cache for 10 minutes and revalidate immediately after
-      },
-      cache: "force-cache",
-      next: { revalidate: 120 }, // Revalidate every 2 minutes
-    });
-
-    if (!res.ok) {
-      throw new Error(`Failed to fetch blog post: ${res.status}`);
-    }
-
-    return res.json();
-  } catch (error) {
-    console.error("Fetch error:", error);
-    return { data: [] }; // Fallback to empty array if fetching fails
-  }
-}
-
 export async function generateMetadata({
   params,
 }: {
   params: Promise<{ slug: string; locale: string }>;
 }): Promise<Metadata> {
   const { slug, locale } = await params;
-  const id = slug.split("-").pop(); // Assuming the ID is part of the slug after a dash
+  const id = slug.split("-").pop();
 
-  if (!id) {
-    throw new Error("Invalid ID");
-  }
+  if (!id) throw new Error("Invalid ID");
 
   const { data: post } = await getBlogPost(id, { locale });
 
   if (!post || post.length === 0) {
-    return { title: "Blog Post Not Found" }; // Fallback metadata if post doesn't exist
+    return { title: "Blog Post Not Found" };
   }
 
   return {
-    title: `${post.title} | Moritz Roessler | Senior Frontend Developer`,
-    description: post.excerpt || "Detailed blog post content here.",
+    title: `${post.title} | Blog Name`,
+    description:
+      post.excerpt || "A detailed blog post on modern development topics.",
     openGraph: {
       type: "article",
       title: post.title,
-      description: post.excerpt || "Detailed blog post content here.",
-      images: [post.coverImage?.url || "/images/wallpaper/22.webp"],
-      url: `https://javascript.moe/blog/${post.slug}`,
+      description:
+        post.excerpt || "A detailed blog post on modern development topics.",
+      images: [post.coverImage?.url || "/images/default-cover.webp"],
+      url: `https://yourdomain.com/blog/${post.slug}`,
     },
     twitter: {
       card: "summary_large_image",
       title: post.title,
-      description: post.excerpt || "Detailed blog post content here.",
-      images: [post.coverImage?.url || "/images/wallpaper/22.webp"],
-      site: "@your_twitter_handle", // Replace with your Twitter handle
+      description:
+        post.excerpt || "A detailed blog post on modern development topics.",
+      images: [post.coverImage?.url || "/images/default-cover.webp"],
+      site: "@your_twitter_handle",
     },
   };
 }
@@ -87,20 +64,16 @@ interface BlogPageProps {
 
 const BlogPage = async ({ params }: BlogPageProps) => {
   const { slug, locale } = await params;
-  const id = slug.split("-").pop(); // Assuming the ID is part of the slug after a dash
+  const id = slug.split("-").pop();
 
   try {
-    if (!id) {
-      throw new Error("Invalid ID");
-    }
+    if (!id) throw new Error("Invalid ID");
 
     const { data: post } = await getBlogPost(id, { locale });
     const { localizations = [] } = post;
 
     const availableLocales = localizations.map((ele: any) => ele.locale);
-    if (!post) {
-      notFound(); // Return a 404 if the post doesn't exist
-    }
+    if (!post) notFound();
 
     const htmlContent = marked(post.content || "");
 
@@ -112,7 +85,7 @@ const BlogPage = async ({ params }: BlogPageProps) => {
             src={
               post.coverImage
                 ? img`${post.coverImage?.url}`
-                : "/images/wallpaper/22.webp"
+                : "/images/default-cover.webp"
             }
             className="w-screen h-screen absolute"
             width={1024}
@@ -127,7 +100,7 @@ const BlogPage = async ({ params }: BlogPageProps) => {
                 </Link>
                 <LanguageSwitcher availableLocales={availableLocales} />
               </div>
-              <h1 className=" p-4 pl-2 bg-black/40 w-fit rounded-sm title">
+              <h1 className="p-4 pl-2 bg-black/40 w-fit rounded-sm title">
                 {post.title}
               </h1>
 
@@ -141,7 +114,7 @@ const BlogPage = async ({ params }: BlogPageProps) => {
     );
   } catch (error) {
     console.error("Error while rendering blog post:", error);
-    notFound(); // Return a 404 if the post doesn't exist or another error occurs
+    notFound();
   }
 };
 

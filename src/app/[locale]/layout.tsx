@@ -1,4 +1,3 @@
-// app/[locale]/layout.tsx
 import { ReactNode } from "react";
 import { setRequestLocale } from "next-intl/server";
 import { NextIntlClientProvider } from "next-intl";
@@ -15,31 +14,28 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { locale } = await params;
 
-  // Hardcoded metadata for English locale
+  // Metadata for English locale
   const enMetadata = {
-    title:
-      "Moritz Roessler | Senior Frontend Developer in Freiburg im Breisgau",
+    title: "Blog Title | Developer, Writer, Creator",
     description:
-      "Moritz Roessler is a Senior Frontend Developer based in Freiburg im Breisgau. Specialized in JavaScript, TypeScript, React, Node.js, SQL, AWS, and Serverless. Explore portfolio, experience, and contact information.",
-    authors: [{ name: "Moritz Roessler" }],
+      "A personal blog about development, design, and tech. Written by a developer passionate about web technologies and digital creativity.",
+    authors: [{ name: "Your Name" }],
     openGraph: {
       type: "website",
-      title:
-        "Moritz Roessler | Senior Frontend Developer in Freiburg im Breisgau",
-      siteName: "Moe's Website",
+      title: "Blog Title | Developer, Writer, Creator",
+      siteName: "Your Site Name",
       description:
-        "Moritz Roessler is a Senior Frontend Developer based in Freiburg im Breisgau. Specialized in JavaScript, TypeScript, React, Node.js, SQL, AWS, and Serverless.",
-      images: ["https://javascript.moe/images/previews/hello.png"],
-      url: "https://javascript.moe/",
+        "A personal blog about development, design, and tech. Written by a developer passionate about web technologies and digital creativity.",
+      images: ["https://yourdomain.com/images/og-default.png"],
+      url: "https://yourdomain.com/",
     },
     twitter: {
       card: "summary_large_image",
-      title:
-        "Moritz Roessler | Senior Frontend Developer in Freiburg im Breisgau",
+      title: "Blog Title | Developer, Writer, Creator",
       description:
-        "Moritz Roessler is a Senior Frontend Developer based in Freiburg im Breisgau. Specialized in JavaScript, TypeScript, React, Node.js, SQL, AWS, and Serverless.",
-      images: ["https://javascript.moe/images/previews/hello.png"],
-      site: "@your_twitter_handle", // Replace with your Twitter handle
+        "A personal blog about development, design, and tech. Written by a developer passionate about web technologies and digital creativity.",
+      images: ["https://yourdomain.com/images/og-default.png"],
+      site: "@your_twitter_handle",
     },
     icons: {
       icon: [
@@ -53,35 +49,32 @@ export async function generateMetadata({
     other: {
       "msapplication-TileColor": "#da532c",
       "content-language": "en",
-      canonical: "https://javascript.moe/",
+      canonical: "https://yourdomain.com/",
     },
   };
 
-  // Hardcoded metadata for German locale
+  // Metadata for German locale
   const deMetadata = {
-    title:
-      "Moritz Roessler | Senior Frontend Entwickler in Freiburg im Breisgau",
+    title: "Blog Titel | Entwickler, Autor, Kreativer",
     description:
-      "Moritz Roessler ist ein Senior Frontend Entwickler mit Sitz in Freiburg im Breisgau. Spezialisiert auf JavaScript, TypeScript, React, Node.js, SQL, AWS und Serverless. Entdecken Sie Portfolio, Erfahrung und Kontaktinformationen.",
-    authors: [{ name: "Moritz Roessler" }],
+      "Ein persönlicher Blog über Entwicklung, Design und Technologie. Geschrieben von einem Entwickler mit Leidenschaft für Web-Technologien und digitale Kreativität.",
+    authors: [{ name: "Dein Name" }],
     openGraph: {
       type: "website",
-      title:
-        "Moritz Roessler | Senior Frontend Entwickler in Freiburg im Breisgau",
-      siteName: "Moe's Website",
+      title: "Blog Titel | Entwickler, Autor, Kreativer",
+      siteName: "Dein Seitenname",
       description:
-        "Moritz Roessler ist ein Senior Frontend Entwickler mit Sitz in Freiburg im Breisgau. Spezialisiert auf JavaScript, TypeScript, React, Node.js, SQL, AWS und Serverless.",
-      images: ["https://javascript.moe/images/previews/hello.png"],
-      url: "https://javascript.moe/",
+        "Ein persönlicher Blog über Entwicklung, Design und Technologie. Geschrieben von einem Entwickler mit Leidenschaft für Web-Technologien und digitale Kreativität.",
+      images: ["https://yourdomain.com/images/og-default.png"],
+      url: "https://yourdomain.com/",
     },
     twitter: {
       card: "summary_large_image",
-      title:
-        "Moritz Roessler | Senior Frontend Entwickler in Freiburg im Breisgau",
+      title: "Blog Titel | Entwickler, Autor, Kreativer",
       description:
-        "Moritz Roessler ist ein Senior Frontend Entwickler mit Sitz in Freiburg im Breisgau. Spezialisiert auf JavaScript, TypeScript, React, Node.js, SQL, AWS und Serverless.",
-      images: ["https://javascript.moe/images/previews/hello.png"],
-      site: "@your_twitter_handle", // Replace with your Twitter handle
+        "Ein persönlicher Blog über Entwicklung, Design und Technologie. Geschrieben von einem Entwickler mit Leidenschaft für Web-Technologien und digitale Kreativität.",
+      images: ["https://yourdomain.com/images/og-default.png"],
+      site: "@your_twitter_handle",
     },
     icons: {
       icon: [
@@ -95,11 +88,10 @@ export async function generateMetadata({
     other: {
       "msapplication-TileColor": "#da532c",
       "content-language": "de",
-      canonical: "https://javascript.moe/",
+      canonical: "https://yourdomain.com/",
     },
   };
 
-  // Select the metadata based on the locale
   return locale === "de" ? deMetadata : enMetadata;
 }
 
@@ -111,18 +103,15 @@ export default async function RootLayout({
   params: Promise<{ locale: string }>;
 }) {
   const { locale } = await params;
-  // Use `params` directly (no await needed)
   setRequestLocale(locale);
+
   return (
-    // <html lang={locale}>
     <NextIntlClientProvider
       messages={
         (await import(`../../assets/translations/${locale}.ts`)).default
-        // … and provide the relevant messages
       }
     >
       {children}
     </NextIntlClientProvider>
-    // </html>
   );
 }
