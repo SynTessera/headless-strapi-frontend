@@ -1,0 +1,176 @@
+@import "tailwindcss";
+
+[type="checkbox"] {
+  -webkit-appearance: none;
+}
+
+label {
+  position: relative;
+}
+
+label input {
+  display: inline-flex;
+  gap: 8px;
+}
+label span {
+  position: absolute;
+  top: -1px;
+  right: 20px;
+}
+.fadingImage img {
+  max-height: 100%;
+}
+
+label {
+  @apply font-semibold;
+}
+
+fieldset {
+  width: 100%;
+}
+
+/* Formulas Overlay */
+.recent .formulas {
+  @apply -translate-x-full;
+  @apply transition-transform;
+}
+.recent .formula {
+  @apply -translate-x-full;
+  @apply transition-transform;
+}
+
+.recent.expanded .formulas,
+.recent.expanded .formula {
+  @apply translate-x-0;
+  @apply transition-transform;
+}
+
+.recent.expanded .detail {
+  @apply translate-x-0;
+  @apply transition-transform;
+}
+
+.recent .detail {
+  @apply translate-x-full;
+  @apply transition-transform delay-300;
+}
+
+.recent.expanded .formulacontainer {
+  @apply translate-x-0;
+  @apply transition-transform;
+}
+
+.recent .formulacontainer {
+  @apply translate-x-full;
+  @apply transition-transform delay-200;
+}
+
+.recent.expanded .blackoverlay {
+  @apply opacity-100;
+  @apply transition-opacity;
+}
+
+.recent .blackoverlay {
+  @apply opacity-0;
+  @apply transition-opacity delay-700;
+}
+
+dialog {
+  overflow: visible;
+}
+dialog::backdrop {
+  z-index: -1;
+  backdrop-filter: saturate(0);
+}
+
+dialog .shadow {
+  box-shadow: 0px 0px 4px 0px #fff;
+}
+
+.page {
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+article p strong {
+  font-weight: 700;
+  font-size: 1.2rem;
+}
+
+h1.title {
+  font-size: 2rem;
+  line-height: 2.2rem;
+  @apply font-light;
+}
+
+@media screen and (min-width: 768px) {
+  /* Styles for tablet and larger devices */
+
+  h1.title {
+    font-size: 3rem;
+    line-height: 3.2rem;
+    @apply font-light;
+  }
+}
+
+article p {
+  margin-bottom: 1rem;
+  font-weight: 200;
+  font-size: 1.4rem;
+}
+
+article p p {
+  margin-bottom: 1rem;
+  @apply overflow-x-auto max-w-full;
+}
+
+article p pre {
+  margin-bottom: 1rem;
+  @apply overflow-x-auto max-w-full;
+}
+
+article ul li {
+  /* margin-bottom: 1rem; */
+  @apply ml-8;
+}
+
+article h2 {
+  @apply !mt-4 !mb-1;
+}
+
+article hr {
+  @apply my-4;
+}
+
+article ul li::before {
+  content: "—"; /* em dash */
+
+  top: 0px;
+  color: #fff; /* or whatever fits your theme */
+  font-weight: bold;
+  @apply absolute -translate-x-8;
+}
+
+article.post h1 {
+  @apply mb-1;
+}
+
+article.post h2 {
+  @apply ml-0 my-1 text-[2rem] font-semibold leading-[2rem];
+}
+
+article.post h3 {
+  @apply ml-0 my-1 text-[1.4rem] font-semibold;
+}
+
+article.post hr {
+  @apply mb-2;
+}
+
+div .category ~ .category {
+  @apply border-l-[2px] border-white;
+}
+
+a[href] {
+  @apply underline;
+}
